@@ -87,4 +87,4 @@ var LSM9DS0 = {
   TIME_WINDOW: 0x3D
 };
 
-module.exports = LSM9D50;
+module.exports = LSM9DS0;
