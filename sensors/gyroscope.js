@@ -1,5 +1,5 @@
 var I2C = require('i2c');
-var LSM9DS0 = require('./registers').LSM9DS0;
+var LSM9DS0 = require('../registers').LSM9DS0;
 
 var binary = function(i) {
   return Number.parseInt(i, 2);
