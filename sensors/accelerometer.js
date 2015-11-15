@@ -24,7 +24,7 @@ Accelerometer.prototype.read = function(command, callback) {
 
 Accelerometer.prototype.initialize = function(callback) {
   var _this = this;
-  this.write(LSM9DS0.CTRL_REG1_XM, binary('01100111'), function(err) {
+  _this.write(LSM9DS0.CTRL_REG1_XM, binary('01100111'), function(err) {
     if (err) throw err;
     _this.write(LSM9DS0.CTRL_REG2_XM, binary('00100000'), function(err) {
       if (err) throw err;
