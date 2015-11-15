@@ -26,13 +26,18 @@ BerryIMU.prototype.angles = function(callback) {
       _this.accelerometer.z(function(accZ) {
         _this.magnetometer.x(function(magX) {
           _this.magnetometer.y(function(magY) {
-            var pitch = Math.atan2(accX, accZ) * (180 / Math.PI);
-            var yaw = 180 * Math.atan2(magY, magX) / Math.PI;
-            var roll = Math.atan2(accY, accZ) * (180 / Math.PI);
+            var pitch = Math.atan2(accY, accZ) * (180 / Math.PI);
+            var yaw = Math.atan2(magY, magX) / (180 / Math.PI);
+            var roll = Math.atan2(accX, accZ) * (180 / Math.PI);
             callback({
-              pitch: pitch,
+              accelerometer: {
+                x: accX,
+                y: accY,
+                z: accZ
+              },
+              pitch: pitch < 0 ? pitch + 360 : pitch,
               yaw: yaw < 0 ? yaw + 360 : yaw,
-              roll: roll
+              roll: roll < 0 ? roll + 360 : roll
             });
           });
         });
@@ -46,6 +51,7 @@ BerryIMU.prototype.measure = function(callback) {
   _this.angles(function(angles) {
     _this.barometer.measure(function(barometer) {
       callback({
+        accelerometer: angles.accelerometer,
         pitch: angles.pitch,
         yaw: angles.yaw,
         roll: angles.roll,
