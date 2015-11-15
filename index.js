@@ -26,11 +26,9 @@ BerryIMU.prototype.angles = function(callback) {
       _this.accelerometer.z(function(accZ) {
         _this.magnetometer.x(function(magX) {
           _this.magnetometer.y(function(magY) {
-            var accXNorm = accX/Math.sqrt(accX * accX + accY * accY + accZ * accZ);
-            var accYNorm = accY/Math.sqrt(accX * accX + accY * accY + accZ * accZ);
-            var pitch = Math.asin(accXNorm);
+            var pitch = Math.atan2(accX, accZ) * (180 / Math.PI);
             var yaw = 180 * Math.atan2(magY, magX) / Math.PI;
-            var roll = -Math.asin(accYNorm/Math.cos(pitch));
+            var roll = Math.atan2(accY, accZ) * (180 / Math.PI);
             callback({
               pitch: pitch,
               yaw: yaw < 0 ? yaw + 360 : yaw,

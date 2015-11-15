@@ -1,16 +1,12 @@
 var I2C = require('i2c');
 
 var s_short = function(v) {
-  var sign = v[0] & (1 << 7);
-  var i = ((v[0] & 0x7F) << 8) | v[1];
-  if (sign) {
-      i = -i;
-  }
+  var i = (((v[0] << 8) | v[1]) << 16) >> 16;
   return i;
 };
 
 var get_short = function(data, index) {
-  return s_short((data[index] << 8) + data[index + 1]);
+  return s_short([data[index], data[index + 1]]);
 };
 
 var get_ushort = function(data, index) {

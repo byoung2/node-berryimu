@@ -1,14 +1,9 @@
 var I2C = require('i2c');
 var LSM9DS0 = require('../registers').LSM9DS0;
-var KalmanFilter = require('../filters').Kalman;
 
 var binary = function(i) {
   return Number.parseInt(i, 2);
 };
-
-var xFilter = new KalmanFilter(false, 0.01, 0.003);
-var yFilter = new KalmanFilter(false, 0.01, 0.003);
-var zFilter = new KalmanFilter(false, 0.01, 0.003);
 
 var Accelerometer = function(address, device) {
   if (!address) address = LSM9DS0.ACC_ADDRESS;
@@ -47,7 +42,7 @@ Accelerometer.prototype.x = function(callback) {
       if (err) throw err;
       var acc_h = res[0];
       var acc = (acc_l | acc_h << 8);
-      callback(xFilter.update(acc < 32768 ? acc : acc - 65536));
+      callback(acc < 32768 ? acc : acc - 65536);
     });
   });
 };
@@ -61,7 +56,7 @@ Accelerometer.prototype.y = function(callback) {
       if (err) throw err;
       var acc_h = res[0];
       var acc = (acc_l | acc_h << 8);
-      callback(yFilter.update(acc < 32768 ? acc : acc - 65536));
+      callback(acc < 32768 ? acc : acc - 65536);
     });
   });
 };
@@ -75,7 +70,7 @@ Accelerometer.prototype.z = function(callback) {
       if (err) throw err;
       var acc_h = res[0];
       var acc = (acc_l | acc_h << 8);
-      callback(zFilter.update(acc < 32768 ? acc : acc - 65536));
+      callback(acc < 32768 ? acc : acc - 65536);
     });
   });
 };
