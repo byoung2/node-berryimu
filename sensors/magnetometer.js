@@ -36,7 +36,21 @@ Magnetometer.prototype.initialize = function(callback) {
   });
 };
 
-Magnetometer.prototype.x = function(callback) {
+Magnetometer.prototype.update = function(callback) {
+  var _this = this;
+  _this.readX(function(x) {
+    _this.readY(function(y) {
+      _this.readZ(function(z) {
+        _this.x = x;
+        _this.y = y;
+        _this.z = z;
+        callback();
+      });
+    });
+  });
+};
+
+Magnetometer.prototype.readX = function(callback) {
   var _this = this;
   _this.read(LSM9DS0.OUT_X_L_M, function(err, res) {
     if (err) throw err;
@@ -50,7 +64,7 @@ Magnetometer.prototype.x = function(callback) {
   });
 };
 
-Magnetometer.prototype.y = function(callback) {
+Magnetometer.prototype.readY = function(callback) {
   var _this = this;
   _this.read(LSM9DS0.OUT_Y_L_M, function(err, res) {
     if (err) throw err;
@@ -64,7 +78,7 @@ Magnetometer.prototype.y = function(callback) {
   });
 };
 
-Magnetometer.prototype.z = function(callback) {
+Magnetometer.prototype.readZ = function(callback) {
   var _this = this;
   _this.read(LSM9DS0.OUT_Z_L_M, function(err, res) {
     if (err) throw err;

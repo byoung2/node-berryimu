@@ -15,48 +15,31 @@ BerryIMU.prototype.initialize = function(callback) {
   _this.accelerometer.initialize(function() {
     _this.magnetometer.initialize(function() {
       _this.gyroscope.initialize(callback);
-    });  
-  });
-};
-
-BerryIMU.prototype.angles = function(callback) {
-  var _this = this;
-  _this.accelerometer.x(function(accX) {
-    _this.accelerometer.y(function(accY) {
-      _this.accelerometer.z(function(accZ) {
-        _this.magnetometer.x(function(magX) {
-          _this.magnetometer.y(function(magY) {
-            var pitch = Math.atan2(accY, accZ) * (180 / Math.PI);
-            var yaw = Math.atan2(magY, magX) / (180 / Math.PI);
-            var roll = Math.atan2(accX, accZ) * (180 / Math.PI);
-            callback({
-              accelerometer: {
-                x: accX,
-                y: accY,
-                z: accZ
-              },
-              pitch: pitch < 0 ? pitch + 360 : pitch,
-              yaw: yaw < 0 ? yaw + 360 : yaw,
-              roll: roll < 0 ? roll + 360 : roll
-            });
-          });
-        });
-      });
     });
   });
 };
 
-BerryIMU.prototype.measure = function(callback) {
+BerryIMU.prototype.update = function(callback) {
   var _this = this;
-  _this.angles(function(angles) {
-    _this.barometer.measure(function(barometer) {
-      callback({
-        accelerometer: angles.accelerometer,
-        pitch: angles.pitch,
-        yaw: angles.yaw,
-        roll: angles.roll,
-        temperature: barometer.temperature,
-        pressure: barometer.pressure
+  _this.accelerometer.update(function() {
+    _this.gyroscope.update(function() {
+      _this.magnetometer.update(function() {
+        _this.barometer.update(function() {
+          var accX = _this.accelerometer.x;
+          var accY = _this.accelerometer.y;
+          var accZ = _this.accelerometer.z;
+          var magX = _this.magnetometer.x;
+          var magY = _this.magnetometer.y;
+          var accXNorm = accX/Math.sqrt(accX * accX + accY * accY + accZ * accZ);
+          var accYNorm = accY/Math.sqrt(accX * accX + accY * accY + accZ * accZ);
+          var pitch = Math.atan2(accY, accZ) * (180 / Math.PI);
+          var yaw = Math.atan2(magY, magX) / (180 / Math.PI);
+          var roll = Math.atan2(accX, accZ) * (180 / Math.PI);
+          _this.pitch = pitch < 0 ? pitch + 360 : pitch;
+          _this.yaw = yaw < 0 ? yaw + 360 : yaw;
+          _this.roll = row < 0 ? roll + 360 : roll;
+          callback();
+        });
       });
     });
   });

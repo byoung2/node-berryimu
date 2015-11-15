@@ -33,7 +33,21 @@ Gyroscope.prototype.initialize = function(callback) {
   });
 };
 
-Gyroscope.prototype.x = function(callback) {
+Gyroscope.prototype.update = function(callback) {
+  var _this = this;
+  _this.readX(function(x) {
+    _this.readY(function(y) {
+      _this.readZ(function(z) {
+        _this.x = x;
+        _this.y = y;
+        _this.z = z;
+        callback();
+      });
+    });
+  });
+};
+
+Gyroscope.prototype.readX = function(callback) {
   var _this = this;
   _this.read(LSM9DS0.OUT_X_L_G, function(err, res) {
     if (err) throw err;
@@ -47,7 +61,7 @@ Gyroscope.prototype.x = function(callback) {
   });
 };
 
-Gyroscope.prototype.y = function(callback) {
+Gyroscope.prototype.readY = function(callback) {
   var _this = this;
   _this.read(LSM9DS0.OUT_Y_L_G, function(err, res) {
     if (err) throw err;
@@ -61,7 +75,7 @@ Gyroscope.prototype.y = function(callback) {
   });
 };
 
-Gyroscope.prototype.z = function(callback) {
+Gyroscope.prototype.readZ = function(callback) {
   var _this = this;
   _this.read(LSM9DS0.OUT_Z_L_G, function(err, res) {
     if (err) throw err;

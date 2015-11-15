@@ -32,6 +32,14 @@ Barometer.prototype.readBlock = function(command, length, callback) {
   this.i2c.readBytes(command, length, callback);
 };
 
+Barometer.prototype.update = function(callback) {
+  var _this = this;
+  _this.measure(function(measure){
+    _this.temperature = measure.temperature;
+    _this.pressure = measure.pressure;
+  });
+};
+
 Barometer.prototype.measure = function(callback) {
   var _this = this;
   _this.readBlock(0xAA, 22, function(err, cal) {
