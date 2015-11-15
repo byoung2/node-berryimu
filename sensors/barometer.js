@@ -37,6 +37,7 @@ Barometer.prototype.update = function(callback) {
   _this.measure(function(measure){
     _this.temperature = measure.temperature;
     _this.pressure = measure.pressure;
+    callback();
   });
 };
 

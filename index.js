@@ -37,7 +37,7 @@ BerryIMU.prototype.update = function(callback) {
           var roll = Math.atan2(accX, accZ) * (180 / Math.PI);
           _this.pitch = pitch < 0 ? pitch + 360 : pitch;
           _this.yaw = yaw < 0 ? yaw + 360 : yaw;
-          _this.roll = row < 0 ? roll + 360 : roll;
+          _this.roll = roll < 0 ? roll + 360 : roll;
           callback();
         });
       });
