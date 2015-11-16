@@ -1,11 +1,10 @@
 var sensors = require('./sensors');
 
-var BerryIMU = function(device, callback) {
+var BerryIMU = function(device) {
   this.accelerometer = new sensors.Accelerometer(null, device);
   this.magnetometer = new sensors.Magnetometer(null, device);
   this.gyroscope = new sensors.Gyroscope(null, device);
   this.barometer = new sensors.Barometer(null, device);
-  this.initialize(callback);
 };
 
 module.exports = BerryIMU;
