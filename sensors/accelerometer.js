@@ -1,3 +1,4 @@
+var MedianFilter = require('../filters').Median;
 var I2C = require('i2c');
 var LSM9DS0 = require('../registers').LSM9DS0;
 
@@ -10,6 +11,9 @@ var Accelerometer = function(address, device) {
   if (!device) device = '/dev/i2c-1';
   this.address = address;
   this.i2c = new I2C(address, {device: device});
+  this.xFilter = new MedianFilter();
+  this.yFilter = new MedianFilter();
+  this.zFilter = new MedianFilter();
 };
 
 module.exports = Accelerometer;
@@ -56,7 +60,7 @@ Accelerometer.prototype.readX = function(callback) {
       if (err) throw err;
       var acc_h = res[0];
       var acc = (acc_l | acc_h << 8);
-      callback(acc < 32768 ? acc : acc - 65536);
+      callback(_this.xFilter.update(acc < 32768 ? acc : acc - 65536));
     });
   });
 };
@@ -70,7 +74,7 @@ Accelerometer.prototype.readY = function(callback) {
       if (err) throw err;
       var acc_h = res[0];
       var acc = (acc_l | acc_h << 8);
-      callback(acc < 32768 ? acc : acc - 65536);
+      callback(_this.yFilter.update(acc < 32768 ? acc : acc - 65536));
     });
   });
 };
@@ -84,7 +88,7 @@ Accelerometer.prototype.readZ = function(callback) {
       if (err) throw err;
       var acc_h = res[0];
       var acc = (acc_l | acc_h << 8);
-      callback(acc < 32768 ? acc : acc - 65536);
+      callback(_this.zFilter.update(acc < 32768 ? acc : acc - 65536));
     });
   });
 };
