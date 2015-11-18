@@ -4,7 +4,8 @@ var async = require('async');
 
 var lastTime = new Date(); 
 
-var berryIMU = new BerryIMU(null, function() {
+var berryIMU = new BerryIMU();
+berryIMU.initialize(function() {
   async.whilst(function() {
     return true;
   }, function(callback) {
