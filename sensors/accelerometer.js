@@ -14,6 +14,7 @@ var Accelerometer = function(address, device) {
   this.xFilter = new MedianFilter();
   this.yFilter = new MedianFilter();
   this.zFilter = new MedianFilter();
+  this.state = {};
 };
 
 module.exports = Accelerometer;
@@ -42,12 +43,29 @@ Accelerometer.prototype.update = function(callback) {
   _this.readX(function(x) {
     _this.readY(function(y) {
       _this.readZ(function(z) {
-        _this.x = x;
-        _this.y = y;
-        _this.z = z;
+        _this.raw = {
+          x: x,
+          y: y,
+          z: z
+        };
+        _this.x = (_this.state.stableX) ? _this.state.stableX - x : x;
+        _this.y = (_this.state.stableY) ? _this.state.stableY - y : y;
+        _this.z = (_this.state.stableZ) ? _this.state.stableZ - z : z;
         callback();
       });
     });
+  });
+};
+
+Accelerometer.prototype.setStable = function(callback) {
+  var _this = this;
+  _this.update(function() {
+    _this.state = {
+      stableX: _this.raw.x,
+      stableY: _this.raw.y,
+      stableZ: _this.raw.z
+    };
+    callback();
   });
 };
 
