@@ -10,7 +10,7 @@
   "private": true,
   "dependencies": {
     "async": "1.5.0",
-    "i2c": "0.2.1",
+    "i2c": "https://github.com/polaris/node-i2c",
     "mathjs": "2.4.2"
   },
   "devDependencies": {
