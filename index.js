@@ -45,6 +45,12 @@ BerryIMU.prototype.update = function(callback) {
           _this.pitch = pitch < 0 ? pitch + 360 : pitch;
           _this.yaw = yaw < 0 ? yaw + 360 : yaw;
           _this.roll = roll < 0 ? roll + 360 : roll;
+          _this.gravity = {
+            x: -1 * Math.sin(_this.yaw / (180 / Math.PI)),
+            y: Math.cos(_this.yaw / (180 / Math.PI)) * Math.sin(_this.roll / (180 / Math.PI)),
+            z: Math.cos(_this.yaw / (180 / Math.PI)) * Math.cos(_this.roll / (180 / Math.PI))
+          },
+          _this.gravity.force = Math.sqrt(Math.pow(_this.gravity.x, 2) + Math.pow(_this.gravity.y, 2) + Math.pow(_this.gravity.z, 2));
           // calculate velocity
           _this.velocity = {
             linear: {
